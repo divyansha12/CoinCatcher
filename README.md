@@ -2,6 +2,9 @@
 
 A 2D Unity game where you move a bucket to catch falling coins.
 
+## Demo Video
+[Watch the gameplay recording](https://drive.google.com/file/d/1W2quKxblWRAiTU1Szf0db9eVbGZNnl_q/view?usp=sharing)
+
 ## Features
 - Score, 60-second timer and 3 lives
 - 3 speed stages that get harder over time
