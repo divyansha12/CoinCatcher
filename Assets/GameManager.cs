@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         }
         elapsed += Time.deltaTime;
         timeLeft -= Time.deltaTime;
-        if (timeLeft <= 0f) { timeLeft = 0f; End(); }
+        if (timeLeft <= 0f) { timeLeft = 0f; End("Time's up!"); }
         Refresh();
     }
 
@@ -49,21 +49,30 @@ public class GameManager : MonoBehaviour
         Refresh();
     }
 
-    public void Miss()
+    // A coin hit the ground: no life lost, but the combo resets
+    public void MissCoin()
+    {
+        if (over) return;
+        combo = 0;
+        Refresh();
+    }
+
+    // A bomb was caught: lose a life
+    public void HitBomb()
     {
         if (over) return;
         lives--;
         combo = 0;
         Refresh();
-        if (lives <= 0) End();
+        if (lives <= 0) End("You caught 3 bombs!");
     }
 
-    void End()
+    void End(string reason)
     {
         over = true;
         int best = PlayerPrefs.GetInt("best", 0);
         if (score > best) { best = score; PlayerPrefs.SetInt("best", best); }
-        overText.text = "GAME OVER\nScore: " + score + "   Best: " + best + "\nPress R to play again";
+        overText.text = "GAME OVER\n" + reason + "\nScore: " + score + "   Best: " + best + "\nPress R to play again";
         overText.gameObject.SetActive(true);
         Refresh();
     }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class CoinSpawner : MonoBehaviour
 {
     public GameObject coinPrefab;
+    public Sprite bombSprite;      // optional: drag a bomb image here
     public float interval = 1f;
     public float xRange = 7f;
     float timer;
@@ -19,6 +20,13 @@ public class CoinSpawner : MonoBehaviour
         Vector3 pos = new Vector3(Random.Range(-xRange, xRange), 6f, 0);
         GameObject go = Instantiate(coinPrefab, pos, Quaternion.identity);
         Coin coin = go.GetComponent<Coin>();
+
+        float bombChance = 0.15f + 0.07f * (gm.Stage - 1);
+        if (Random.value < bombChance)
+        {
+            coin.Init(0, new Color(0.1f, 0.1f, 0.12f), gm.CoinGravity(), true, bombSprite);
+            return;
+        }
 
         float r = Random.value;
         if (r < 0.06f) coin.Init(25, new Color(1f, 0.5f, 0.1f), gm.CoinGravity());

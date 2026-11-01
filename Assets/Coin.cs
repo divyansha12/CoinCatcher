@@ -3,6 +3,7 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     [HideInInspector] public bool caught;
+    [HideInInspector] public bool isBomb;
     [HideInInspector] public int value = 10;
 
     void Awake()
@@ -11,10 +12,17 @@ public class Coin : MonoBehaviour
         if (rb != null) rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
-    public void Init(int v, Color c, float gravity)
+    public void Init(int v, Color c, float gravity, bool bomb = false, Sprite bombSprite = null)
     {
         value = v;
-        GetComponent<SpriteRenderer>().color = c;
+        isBomb = bomb;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.color = c;
+        if (bomb)
+        {
+            if (bombSprite != null) { sr.sprite = bombSprite; sr.color = Color.white; }
+            transform.localScale *= 1.25f;
+        }
         GetComponent<Rigidbody2D>().gravityScale = gravity;
     }
 
@@ -23,7 +31,7 @@ public class Coin : MonoBehaviour
         if (!caught && transform.position.y < -5.3f)
         {
             caught = true;
-            GameManager.Instance.Miss();
+            if (!isBomb) GameManager.Instance.MissCoin();
             Destroy(gameObject);
         }
     }

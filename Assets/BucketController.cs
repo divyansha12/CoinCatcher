@@ -28,7 +28,24 @@ public class BucketController : MonoBehaviour
         if (coin == null || coin.caught) return;
 
         coin.caught = true;
-        GameManager.Instance.Catch(coin.value);
+        if (coin.isBomb)
+        {
+            GameManager.Instance.HitBomb();
+            StartCoroutine(Flash());
+        }
+        else
+        {
+            GameManager.Instance.Catch(coin.value);
+        }
         Destroy(other.gameObject);
+    }
+
+    System.Collections.IEnumerator Flash()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null) yield break;
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        sr.color = Color.white;
     }
 }
